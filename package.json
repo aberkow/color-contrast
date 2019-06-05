@@ -1,6 +1,6 @@
 {
-  "name": "color-contrast",
-  "version": "0.0.0",
+  "name": "@ajberkow/color-contrast",
+  "version": "0.0.1",
   "author": "Adam Berkowitz",
   "description": "A utility to check for WCAG compliant color contrast",
   "bin": {
