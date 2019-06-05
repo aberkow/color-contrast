@@ -1,0 +1,41 @@
+{
+  "name": "color-contrast",
+  "version": "0.0.0",
+  "author": "Adam Berkowitz",
+  "description": "A utility to check for WCAG compliant color contrast",
+  "bin": {
+    "color-contrast": "./bin/run"
+  },
+  "bugs": "https://github.com/aberkow/color-contrast/issues",
+  "dependencies": {
+    "@oclif/command": "^1.5.14",
+    "@oclif/config": "^1.13.0",
+    "@oclif/plugin-help": "^2.2.0"
+  },
+  "devDependencies": {
+    "@oclif/test": "^1.2.4",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.3.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/src"
+  ],
+  "homepage": "https://github.com/aberkow/color-contrast",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "oclif": {
+    "bin": "color-contrast"
+  },
+  "repository": "aberkow/color-contrast",
+  "scripts": {
+    "test": "nyc mocha --forbid-only \"test/**/*.test.js\""
+  }
+}
