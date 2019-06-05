@@ -12,7 +12,15 @@ A small utility to calculate color contrast and determine WCAG compliance. This 
 <!-- toc -->
 ## Usage
 <!-- usage -->
-TODO
+### Installation
+For now, you can install this utility with `npm install -g @ajberkow/color-contrast`. Please note it's still very much in development and updates may break it.
+
+If you want to build a binary for yourself, you can
+- install [pkg](https://www.npmjs.com/package/pkg) `npm install -g pkg` 
+- clone this repo
+- `pkg --out-path $PWD/dist package.json`
+- move the file for your OS into your path
+
 ## Commands
 <!-- commands -->
 Commands take the format `color-contrast [-f <foreground hex value>] [-b <background hex value>]`. Foreground and background values can be entered with or without `#` signs. The default values are
