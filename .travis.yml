@@ -1,0 +1,6 @@
+languge: node_js
+script:
+  - echo ${TRAVIS_NODE_VERSION}
+  - npm install
+  - npm run package
+

@@ -16,7 +16,8 @@
     "@oclif/test": "^1.2.4",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "pkg": "^4.4.0"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -36,6 +37,7 @@
   },
   "repository": "aberkow/color-contrast",
   "scripts": {
-    "test": "nyc mocha --forbid-only \"test/**/*.test.js\""
+    "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
+    "package": "pkg --out-path $PWD/dist package.json"
   }
 }
