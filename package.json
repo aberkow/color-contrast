@@ -38,6 +38,6 @@
   "repository": "aberkow/color-contrast",
   "scripts": {
     "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
-    "package": "pkg --out-path $PWD/dist package.json"
+    "package": "pkg --out-path $PWD/dist package.json && gzip dist/color-contrast-{linux,macos,win.exe}"
   }
 }
