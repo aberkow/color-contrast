@@ -16,6 +16,8 @@ class ContrastCommand extends Command {
       evaluatedFg = this.cleanRGB(fg)
     } else if (flags.hsl) {
       this.log('hsl set')
+      evaluatedBg = this.hslToRGB(bg)
+      this.log(evaluatedBg)
     } else {
       evaluatedBg = this.hexToRGB(bg)
       evaluatedFg = this.hexToRGB(fg)
@@ -127,6 +129,91 @@ class ContrastCommand extends Command {
       b: +b
     }
 
+  }
+
+  hslToRGB(hsl) {
+    let r = 0
+    let g = 0
+    let b = 0
+    let c = 0
+    let x = 0
+    let m = 0
+
+    /**
+     * regex to match hsl values. 
+     * - removes % signs
+     * - keeps decimals and hsl relavent strings (e.g. 0.5turn)
+     * examples that match include
+     * - hsl(180, 100%, 100%)
+     * - hsl(0.5turn, 100%, 50%)
+     * - hsl(3.14rad, 100%, 0%)
+     */
+
+    const regex = /(\d+[.]?\w*)/g
+
+    const hslArray = hsl.match(regex).map(val => {
+
+      const regex = /[a-z]/
+      const hasLetters = regex.test(val)
+
+      if (!hasLetters) return +val
+
+      if (val.indexOf('deg') > -1) {
+        val = val.substr(0, val.length - 3)
+      } else if (val.indexOf('rad') > -1) {
+        val = Math.round(val.substr(0, val.length - 3) * (180 / Math.PI))
+      } else if (val.indexOf('turn') > -1) {
+        val = Math.round(val.substr(0, val.length - 4) * 360)
+      }
+
+      if (val >= 360) {
+        val %= 360
+      }
+
+      return +val
+
+    })
+
+    // h = hslArray[0] s = hslArray[1] l = hslArray[2]
+    c = (1 - Math.abs(2 * hslArray[2] - 1)) * hslArray[1]
+    x = c * (1 - Math.abs((hslArray[0] / 60) % 2 - 1))
+    m = hslArray[2] - c / 2
+
+    if (0 < hslArray[0] && hslArray[0] < 60) {
+      r = c
+      g = x
+      b = 0
+    } else if (60 <= hslArray[0] && hslArray[0] < 120) {
+      r = x 
+      g = c 
+      b = 0
+    } else if (120 <= hslArray[0] && hslArray[0] < 180) {
+      r = 0 
+      g = c 
+      b = x
+    } else if (180 <= hslArray[0] && hslArray[0] < 240) {
+      r = 0 
+      g = x 
+      b = c
+    } else if (240 <= hslArray[0] && hslArray[0] < 300) {
+      r = x 
+      g = 0 
+      b = c
+    } else if (300 <= hslArray[0] && hslArray[0] < 360) {
+      r = c
+      g = 0
+      b = x
+    }
+
+    r = Math.round((r + m) * 255)
+    g = Math.round((g + m) * 255)
+    b = Math.round((b + m) * 255)
+
+    return {
+      r,
+      g,
+      b
+    }
   }
 
   /**
