@@ -2,14 +2,28 @@ const { Command, flags } = require('@oclif/command')
 
 class ContrastCommand extends Command {
   async run() {
+    
     const { flags } = this.parse(ContrastCommand)
-
+    
     const bg = flags.background || 'ffffff'
     const fg = flags.foreground || '000000'
+    let evaluatedBg
+    let evaluatedFg
+
+    if (flags.rgb) {
+      this.log('rgb set')
+      evaluatedBg = this.cleanRGB(bg)
+      evaluatedFg = this.cleanRGB(fg)
+    } else if (flags.hsl) {
+      this.log('hsl set')
+    } else {
+      evaluatedBg = this.hexToRGB(bg)
+      evaluatedFg = this.hexToRGB(fg)
+    }
 
     const colors = {
-      bg: this.hexToRGB(bg),
-      fg: this.hexToRGB(fg),
+      bg: evaluatedBg,
+      fg: evaluatedFg,
       bgSum: 0,
       fgSum: 0
     }
@@ -107,14 +121,35 @@ class ContrastCommand extends Command {
     const b = h.length === 3 ? `0x${h[2]}${h[2]}` : `0x${h[4]}${h[5]}`
 
     // convert the values to integers
-    const channels = {
+    return {
       r: +r,
       g: +g,
       b: +b
     }
 
-    return channels
   }
+
+  /**
+   * 
+   * RGB values passed via the cli must be entered as strings.
+   * In order to get the color contrast, the individual channels need to be converted to integers first.
+   * 
+   * @param {string} rgb an rgb string in the format 'rgb(r, g, b)'
+   */
+  cleanRGB(rgb) {
+
+    const regex = /(\d+)/g
+
+    // convert the strings returned from the regex match to integers
+    const rgbArray = rgb.match(regex).map(x => +x)
+
+    return {
+      r: rgbArray[0],
+      g: rgbArray[1],
+      b: rgbArray[2]
+    }
+  }
+
   /**
    * 
    * Scale 8bit RGB values according to relative luminance
@@ -151,6 +186,11 @@ ContrastCommand.flags = {
   help: flags.help({ char: 'h' }),
   background: flags.string({ char: 'b', description: 'background color' }),
   foreground: flags.string({ char: 'f', description: 'foreground color' }),
+  hsl: flags.boolean({ char: 'l', default: false, description: 'set this flag to pass hsl values' }),
+  rgb: flags.boolean({ char: 'r', default: false, description: `set this flag to pass rgb values. they must be passed as a string - 'rgb(r,g,b)'` }),
+  hex: flags.boolean({ char: 'x', default: true, description: 'this flag is optional. values passed are assumed to be hexadecimal' }),
 }
+
+
 
 module.exports = ContrastCommand
